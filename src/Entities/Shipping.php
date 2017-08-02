@@ -2,6 +2,13 @@
 
 namespace Docode\Koin\Entities;
 
+/**
+ * Class Shipping
+ * @package Docode\Koin\Entities
+ * @property string Address
+ * @property \DateTime DeliveryDate
+ * @property float Price
+ */
 class Shipping extends BaseEntity
 {
     protected $fillable = [
@@ -32,7 +39,7 @@ class Shipping extends BaseEntity
      */
     public function setDeliveryDate(\DateTime $date)
     {
-        $this->attributes["DeliveryDate"] = $date->format("yyyy-mm-dd H:i:s");
+        $this->attributes["DeliveryDate"] = $date->format("Y-m-d H:i:s");
         return $this;
     }
 

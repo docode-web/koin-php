@@ -2,7 +2,12 @@
 
 namespace Docode\Koin\Entities;
 
-
+/**
+ * Class Buyer
+ * @package Docode\Koin\Entities
+ * @property string Name
+ * @property string Email
+ */
 class Buyer extends BaseEntity
 {
     protected $fillable = [
@@ -68,6 +73,26 @@ class Buyer extends BaseEntity
             "PhoneType" => $type
         ];
 
+        return $this;
+    }
+
+    /**
+     * @param string $Name
+     * @return Buyer
+     */
+    public function setName($Name)
+    {
+        $this->Name = $Name;
+        return $this;
+    }
+
+    /**
+     * @param string $Email
+     * @return Buyer
+     */
+    public function setEmail($Email)
+    {
+        $this->Email = $Email;
         return $this;
     }
 }

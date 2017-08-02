@@ -73,9 +73,17 @@ class Koin
 
         //Recebendo resposta
         try {
-            $response = json_decode(curl_exec($ch));
+            $curlResponse = curl_exec($ch);
+            $jsonResponse = json_decode( $curlResponse );
+            $response = new Response( $jsonResponse );
+
             curl_close ($ch);
-            return new Response( $response );
+
+            if (!$response->getCode()) {
+                throw new \Exception($jsonResponse->message);
+            }
+
+            return $response;
         }
         catch (\Exception $e) {
             return new Response((object)[

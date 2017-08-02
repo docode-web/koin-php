@@ -48,4 +48,16 @@ class BaseEntity implements JsonSerializable
     {
         return $this->attributes;
     }
+
+    public function __set($name, $value)
+    {
+        if (in_array($name, $this->fillable)) {
+            $this->attributes[$name] = $value;
+        }
+    }
+
+    public function __get($name)
+    {
+        return isset($this->attributes[$name]) ? $this->attributes[$name] : null;
+    }
 }
