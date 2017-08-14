@@ -125,6 +125,28 @@ class ApiTest extends TestCase
         $this->assertCount(2, $response->getInstallmentOptions() );
     }
 
+    public function testCheckTransactionStatus()
+    {
+        $api = $this->getMockApi();
+
+        $api->method("checkStatus")
+            ->willReturn(new Response((Object)[
+                    "Status"=>"Aprovado",
+                    "Code"=>200,
+                    "Message"=>"Sua compra foi APROVADA! Obrigado por comprar com Koin Pós-Pago.",
+                    "RequestDate"=>"2014-08-06 12:14:44",
+                    "AdditionalInfo"=> null,
+                    "Reference"=>"11919"
+            ]));
+
+        /**
+         * @var Response $response
+         */
+        $response = $api->checkStatus("11919");
+
+        $this->assertEquals(200, $response->getCode());
+    }
+
     /**
      * @return Buyer
      */

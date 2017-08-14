@@ -58,6 +58,18 @@ class Koin
     }
 
     /**
+     * Check Transaction Status
+     * @param $reference
+     * @return Response
+     */
+    public function checkStatus($reference)
+    {
+        return $this->doRequest("Transaction/status", json_encode([
+            "Reference" => $reference
+        ]));
+    }
+
+    /**
      * Dispatch Request to Koin
      * @param $path
      * @param $jsonData
