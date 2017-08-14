@@ -70,6 +70,22 @@ class Koin
     }
 
     /**
+     * Inform Tracking Code
+     * @param $reference
+     * @param $trackingCode
+     * @param $carrierCompany
+     * @return Response
+     */
+    public function sendTrackingCode($reference, $trackingCode, $carrierCompany)
+    {
+        return $this->doRequest("Transaction/delivery", json_encode([
+            "Reference"     => $reference,
+            "TrackingCode"  => $trackingCode,
+            "CarrierCompany"=> $carrierCompany
+        ]));
+    }
+
+    /**
      * Dispatch Request to Koin
      * @param $path
      * @param $jsonData

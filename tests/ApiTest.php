@@ -147,6 +147,25 @@ class ApiTest extends TestCase
         $this->assertEquals(200, $response->getCode());
     }
 
+    public function testSendTrackingCode()
+    {
+        /**
+         * @var Koin $api
+         */
+        $api = $this->getMockApi();
+
+        $api->method("sendTrackingCode")
+            ->willReturn(new Response((Object)[
+                "Code"=> 13100,
+                "Message"=> "Processamento realizado com sucesso",
+                "AdditionalInfo"=> []
+            ]));
+
+        $response = $api->sendTrackingCode("1919", "PE123BR", "Correios");
+
+        $this->assertEquals(13100, $response->getCode());
+    }
+
     /**
      * @return Buyer
      */
