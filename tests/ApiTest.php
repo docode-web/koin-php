@@ -24,7 +24,8 @@ class ApiTest extends TestCase
     public function testCreateOrderApiCall()
     {
         $order = new Order([
-            "FraudId" => "dkf348lcu20ecvf8013gfckdksmd"
+            "FraudId" => "dkf348lcu20ecvf8013gfckdksmd",
+            "PaymentType" => "21"
         ]);
 
         $api = new Koin(Environment::SANDBOX, $this->consumerKey, $this->secretKey);

@@ -14,7 +14,7 @@ class OrderTest extends TestCase
         $order = new Order();
 
         $this->assertEquals(
-            '{"Currency":"BRL","PaymentType":"21","Buyer":[],"Shipping":[],"Items":[]}',
+            '{"Currency":"BRL","Buyer":[],"Shipping":[],"Items":[]}',
             $order->toJson()
         );
     }
@@ -25,7 +25,7 @@ class OrderTest extends TestCase
         $order->addItem(new Item(["foo"=>"bar"]));
         $order->addItem(new Item());
         $this->assertEquals(
-            '{"Currency":"BRL","PaymentType":"21","Buyer":[],"Shipping":[],"Items":[{"Attributes":[]},{"Attributes":[]}]}',
+            '{"Currency":"BRL","Buyer":[],"Shipping":[],"Items":[{"Attributes":[]},{"Attributes":[]}]}',
             $order->toJson()
         );
     }

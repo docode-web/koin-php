@@ -41,7 +41,6 @@ class Order extends BaseEntity
 
     public $attributes = [
         "Currency"  => "BRL",
-        "PaymentType"=> "21",
         "Buyer"     => [],
         "Shipping"  => [],
         "Items"     => []
