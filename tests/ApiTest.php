@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 
 class ApiTest extends TestCase
 {
-    private $consumerKey = "1BFCF567A63E4B6FB38F6A22FFA21FFE";
+    private $consumerKey = "61D7DAE70ED6496EB7EDDE5FE0D15B47";
 
     private $secretKey = "50856FDA556747A7860C3295C25FEA26";
 
@@ -62,11 +62,9 @@ class ApiTest extends TestCase
 
         $order->setFraudId("dkf348lcu20ecvf8013gfckdksmd");
 
-        $mockApi = $this->getMockBuilder( Koin::class )
-                        ->disableOriginalConstructor()
-                        ->getMock();
+        $api = $this->getMockApi();
 
-        $mockApi->method("makeOrder")
+        $api->method("makeOrder")
                 ->willReturn(new Response((Object)[
                     "Code" => 300
                 ]));
@@ -74,9 +72,56 @@ class ApiTest extends TestCase
         $order->addItem( $this->getItem(1, "Product Test 1", 19.90, 3) );
         $order->addItem( $this->getItem(2, "Product Test 2", 14.90, 5) );
 
-        $response = $mockApi->makeOrder($order);
+        $response = $api->makeOrder($order);
 
         $this->assertEquals("300", $response->getCode());
+    }
+
+    public function testCheckCreditLimit()
+    {
+        $buyer = $this->getBuyer();
+
+        $api = $this->getMockApi();
+
+        $api->method("checkCredit")
+            ->willReturn(new Response((Object)[
+                "Code" => 10100,
+                "CreditLimitAvailable"=> 1000.00,
+	            "Message"=> "Consulta realizada com sucesso.",
+                "installmentOptions"=> [
+                    (Object)[
+                    "iof"=> "0",
+                    "cet"=> "0",
+                    "installments"=> "1",
+                    "rates"=> "0",
+                    "description"=> "A Vista",
+                    "originalValue"=> "500.00",
+                    "firstDueDate"=> "2017-08-10",
+                    "orderValue"=> "500.00",
+                    "installmentValue"=> "500.00",
+                    "paymentType"=> "21"
+                ], (Object) [
+                    "iof"=> "2.61",
+                    "cet"=> "312.13",
+                    "installments"=> "2",
+                    "rates"=> "11.90",
+                    "description"=> "2 x de R$295.28",
+                    "originalValue"=> "500.00",
+                    "firstDueDate"=> "2017-08-10",
+                    "orderValue"=> "590.56",
+                    "installmentValue"=> "295.28",
+                    "paymentType"=> "22"
+                ]]
+            ]));
+
+        /**
+         * @var Response $response
+         */
+        $response = $api->checkCredit($buyer, 200);
+
+        $this->assertEquals(10100, $response->getCode());
+        $this->assertEquals(1000.00, $response->getCreditLimitAvailable() );
+        $this->assertCount(2, $response->getInstallmentOptions() );
     }
 
     /**
@@ -142,5 +187,17 @@ class ApiTest extends TestCase
              ->setQuantity( $quantity );
 
         return $item;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getMockApi()
+    {
+        $api = $this->getMockBuilder( Koin::class )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        return $api;
     }
 }

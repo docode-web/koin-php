@@ -3,6 +3,7 @@
 namespace Docode\Koin;
 
 
+use Docode\Koin\Entities\Buyer;
 use Docode\Koin\Entities\Order;
 use Docode\Koin\Entities\Response;
 use Docode\Koin\Enum\Environment;
@@ -39,6 +40,21 @@ class Koin
     public function makeOrder(Order $order)
     {
         return $this->doRequest("TransactionService.svc/Request", $order->toJson());
+    }
+
+    /**
+     * Check Credit is available
+     * @param Buyer $buyer
+     * @param $creditValue
+     * @return Response
+     */
+    public function checkCredit(Buyer $buyer, $creditValue)
+    {
+        return $this->doRequest("AccountService.svc/Search", json_encode([
+            "Cpf"   => $buyer->getCpf(),
+            "Email" => $buyer->Email,
+            "Price" => $creditValue
+        ]));
     }
 
     /**

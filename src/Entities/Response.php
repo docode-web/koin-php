@@ -17,6 +17,10 @@ class Response
 
     private $reference;
 
+    private $installmentOptions;
+
+    private $creditLimitAvailable;
+
     /**
      * Response constructor.
      * @param $response
@@ -29,6 +33,8 @@ class Response
         $this->additionalInfo   = isset($response->AdditionalInfo) ? $response->AdditionalInfo : null;
         $this->requestDate      = isset($response->RequestDate) ? $response->Code : null;
         $this->reference        = isset($response->Reference) ? $response->Reference : null;
+        $this->installmentOptions= isset($response->installmentOptions) ? $response->installmentOptions : null;
+        $this->creditLimitAvailable= isset($response->CreditLimitAvailable) ? $response->CreditLimitAvailable: null;
     }
 
     /**
@@ -93,5 +99,21 @@ class Response
     public function getReference()
     {
         return $this->reference;
+    }
+
+    /**
+     * @return null
+     */
+    public function getInstallmentOptions()
+    {
+        return $this->installmentOptions;
+    }
+
+    /**
+     * @return null
+     */
+    public function getCreditLimitAvailable()
+    {
+        return $this->creditLimitAvailable;
     }
 }

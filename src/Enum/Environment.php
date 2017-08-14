@@ -15,6 +15,6 @@ class Environment
             return "https://api.koin.com.br/V1/";
         }
 
-        return "http://api.qa.koin.in/V1/";
+        return "http://api.qa.koin.in:8000/V1/";
     }
 }

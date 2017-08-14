@@ -7,12 +7,14 @@ namespace Docode\Koin\Entities;
  * @package Docode\Koin\Entities
  * @property string Name
  * @property string Email
+ * @property string Ip
  */
 class Buyer extends BaseEntity
 {
     protected $fillable = [
         "Name",
         "Email",
+        "Ip",
 
         "Documents",
         "AdditionalInfo",
@@ -38,6 +40,16 @@ class Buyer extends BaseEntity
         ];
 
         return $this;
+    }
+
+    public function getCpf()
+    {
+        foreach($this->attributes["Documents"] as $document){
+            if ($document['Key'] == "CPF") {
+                return $document['Value'];
+            }
+        }
+        return null;
     }
 
     /**
@@ -93,6 +105,16 @@ class Buyer extends BaseEntity
     public function setEmail($Email)
     {
         $this->Email = $Email;
+        return $this;
+    }
+
+    /**
+     * @param string $IpAddress
+     * @return Buyer
+     */
+    public function setIp($IpAddress)
+    {
+        $this->Ip = $IpAddress;
         return $this;
     }
 }
