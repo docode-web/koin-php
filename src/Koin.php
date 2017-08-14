@@ -43,6 +43,24 @@ class Koin
     }
 
     /**
+     * Refund Order
+     * @param $reference
+     * @param $refundType
+     * @param $value
+     * @param $refundDescription
+     * @return Response
+     */
+    public function refundOrder($reference, $refundType, $value, $refundDescription)
+    {
+        return $this->doRequest("Transaction/reverse", json_encode([
+            "Reference" => $reference,
+            "Type"      => $refundType,
+            "Value"     => $value,
+            "AdditionalInfo" => $refundDescription
+        ]));
+    }
+
+    /**
      * Check Credit is available
      * @param Buyer $buyer
      * @param $creditValue

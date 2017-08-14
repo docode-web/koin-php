@@ -12,6 +12,7 @@ use Docode\Koin\Entities\Shipping;
 use Docode\Koin\Enum\AddressType;
 use Docode\Koin\Enum\Environment;
 use Docode\Koin\Enum\PhoneType;
+use Docode\Koin\Enum\RefundType;
 use Docode\Koin\Koin;
 use PHPUnit\Framework\TestCase;
 
@@ -164,6 +165,28 @@ class ApiTest extends TestCase
         $response = $api->sendTrackingCode("1919", "PE123BR", "Correios");
 
         $this->assertEquals(13100, $response->getCode());
+    }
+
+    public function testRefundOrder()
+    {
+        /**
+         * @var Koin $api
+         */
+        $api = $this->getMockApi();
+
+        $api->method("refundOrder")
+            ->willReturn(new Response((Object)[
+                "Code"=>12100,
+	            "Message"=>"Processamento realizado com sucesso. Pedido Estornado.",
+                "AdditionalInfo"=> [
+                    "Reference" => "#ABC123",
+			        "AdditionalInfo" => "Comprador solicitou a devolução do produto X"
+                ]
+        ]));
+
+        $response = $api->refundOrder("1919", RefundType::PARTIAL, 10.00, "Invalid Address");
+
+        $this->assertEquals("12100", $response->getCode());
     }
 
     /**
