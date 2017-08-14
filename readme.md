@@ -5,7 +5,7 @@ Integração com método de pagamento KOIN
 
 # Instalação
 A Instalação deve ser feita via composer:
-`composer require docode-web/koin-php`
+`composer require docode/koin-php`
 
 ### Consulta Crédito e Parcelas
 ```php
