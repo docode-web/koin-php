@@ -32,7 +32,7 @@ class ApiTest extends TestCase
         $response = $api->makeOrder( $order );
 
         $this->assertFalse( $response->isSuccess() );
-        $this->assertEquals( 999, $response->getCode() );
+        $this->assertEquals( 501, $response->getCode() );
     }
 
     public function testApiCallWithoutKeys()
