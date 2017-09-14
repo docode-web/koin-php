@@ -18,9 +18,9 @@ class Shipping extends BaseEntity
     ];
 
     protected $attributes = [
-        "Address",
-        "DeliveryDate",
-        "Price"
+        "Address" => null,
+        "DeliveryDate" => "",
+        "Price" => 0
     ];
 
     /**
