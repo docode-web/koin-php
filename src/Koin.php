@@ -12,6 +12,8 @@ class Koin
 {
     protected $baseUrl;
 
+    protected $restBaseUrl;
+
     private $environment;
 
     private $consumerKey;
@@ -30,6 +32,7 @@ class Koin
         $this->consumerKey = $consumerKey;
         $this->secretKey = $secretKey;
         $this->baseUrl = Environment::getBaseUrl($environment);
+        $this->restBaseUrl = Environment::getBaseRestUrl($environment);
     }
 
     /**
@@ -39,7 +42,7 @@ class Koin
      */
     public function makeOrder(Order $order)
     {
-        return $this->doRequest("TransactionService.svc/Request", $order->toJson());
+        return $this->doRequest("TransactionService.svc/Request", $order->toJson(), false);
     }
 
     /**
@@ -57,7 +60,7 @@ class Koin
             "Type"      => $refundType,
             "Value"     => $value,
             "AdditionalInfo" => $refundDescription
-        ]));
+        ]), true);
     }
 
     /**
@@ -72,7 +75,7 @@ class Koin
             "Cpf"   => $buyer->getCpf(),
             "Email" => $buyer->Email,
             "Price" => $creditValue
-        ]));
+        ]), false);
     }
 
     /**
@@ -84,7 +87,7 @@ class Koin
     {
         return $this->doRequest("Transaction/status", json_encode([
             "Reference" => $reference
-        ]));
+        ]), true);
     }
 
     /**
@@ -100,7 +103,7 @@ class Koin
             "Reference"     => $reference,
             "TrackingCode"  => $trackingCode,
             "CarrierCompany"=> $carrierCompany
-        ]));
+        ]), true);
     }
 
     /**
@@ -109,13 +112,15 @@ class Koin
      * @param $jsonData
      * @return Response
      */
-    private function doRequest($path, $jsonData)
+    private function doRequest($path, $jsonData, $isRest = true)
     {
         // Obtém hora do servidor
         $time = time();
 
+        $baseUrl = $isRest ? $this->restBaseUrl : $this->baseUrl;
+
         //Criando o hash de autenticação
-        $binaryHash = hash_hmac('sha512', $this->baseUrl.$path.$time, $this->secretKey, true);
+        $binaryHash = hash_hmac('sha512', $baseUrl.$path.$time, $this->secretKey, true);
 
         //Convertendo para Base64
         $hash = base64_encode($binaryHash);
@@ -124,7 +129,7 @@ class Koin
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_URL, $this->baseUrl.$path);
+        curl_setopt($ch, CURLOPT_URL, $baseUrl.$path);
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
         curl_setopt($ch, CURLOPT_HTTPHEADER, [

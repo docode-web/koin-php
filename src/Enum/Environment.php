@@ -17,4 +17,13 @@ class Environment
 
         return "http://api.qa.koin.in:8000/V1/";
     }
+
+    public static function getBaseRestUrl($environment = self::PRODUCTION)
+    {
+        if ($environment == self::PRODUCTION) {
+            return "https://api-rest.koin.com.br/";
+        }
+
+        return "http://api-rest.qa.koin.in/";
+    }
 }
