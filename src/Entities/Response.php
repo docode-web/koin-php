@@ -3,7 +3,7 @@
 namespace Docode\Koin\Entities;
 
 
-class Response
+class Response implements \JsonSerializable
 {
     private $status;
 
@@ -115,5 +115,40 @@ class Response
     public function getCreditLimitAvailable()
     {
         return $this->creditLimitAvailable;
+    }
+
+    /**
+     * Transform to Json String
+     * @return string
+     */
+    public function toJson()
+    {
+        return json_encode( (Object) $this->toArray() );
+    }
+
+    public function toArray()
+    {
+        return [
+            "status"                => $this->status,
+            "code"                  => $this->code,
+            "message"               => $this->message,
+            "additionalInfo"        => $this->additionalInfo,
+            "requestDate"           => $this->requestDate,
+            "reference"             => $this->reference,
+            "installmentOptions"    => $this->installmentOptions,
+            "creditLimitAvailable"  => $this->creditLimitAvailable
+        ];
+    }
+
+    /**
+     * Specify data which should be serialized to JSON
+     * @link http://php.net/manual/en/jsonserializable.jsonserialize.php
+     * @return mixed data which can be serialized by <b>json_encode</b>,
+     * which is a value of any type other than a resource.
+     * @since 5.4.0
+     */
+    function jsonSerialize()
+    {
+        return $this->toArray();
     }
 }
